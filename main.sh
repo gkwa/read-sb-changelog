@@ -35,11 +35,23 @@ set -u
 # the second to last.  Explorer this more.
 #
 
+# fixme:
+#
+##xx00: #--*--Mode:-org--*--
+##xx01: Streambox-HD-win32-64-decoder
+##xx02: Streambox-SD-win32-64-decoder
+##xx03: Streambox-HD-osx-encoder
+##xx04: Streambox-HD-win32-64-encoder
+##xx05: Streambox-SD-osx-encoder
+##xx06: Streambox-SD-win32-64-encoder
+#
+# is created from csplit, try to get rid of  this entry: #xx00: #--*--Mode:-org--*--
+
 	            
 TMP=`mktemp -t main.sh.XXXXXX`
 
 perl parse-notes.pl > allinone.org
-cat >$TMP<<EOF
+cat >$TMP<<'EOF'
 # -*- Mode: org -*- 
 #+TITLE:     
 #+AUTHOR:    Taylor Monacelli
