@@ -21,6 +21,8 @@ while(<F>)
 	if(m/^ *\|/){
 	    chomp;
 	    next if(m/----------/);
+	    next if(/fixme/i);
+
 	    s,^[\t ]+,,;
 	    s,[\t ]+, ,;
 	    s, *\| *,|,g;
