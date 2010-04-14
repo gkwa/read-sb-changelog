@@ -13,7 +13,7 @@ use Data::Dumper;
 my @list;
 my %elist;
 my %dlist;
-my $f = "/Users/taylormonacelli/notes.txt";
+my $f = "/Users/$ENV{USER}/notes.txt";
 open F, "<$f";
 while(<F>)
 {
