@@ -1,0 +1,564 @@
+   #[1]SBWiki (en) [2]SBWiki RSS Feed [3]SBWiki Atom Feed
+
+Decoder changelog
+
+From SBWiki
+
+   Jump to: [4]navigation, [5]search
+
+Contents
+
+     * [6]1 Decoder v3.134.01 (2011/12/09)
+     * [7]2 Decoder v3.133.14
+     * [8]3 Decoder v3.133.12
+     * [9]4 Decoder v3.133.11
+     * [10]5 Decoder v3.133.10
+     * [11]6 Decoder v3.133.09
+     * [12]7 Decoder v3.133.08
+     * [13]8 Decoder v3.133.07
+     * [14]9 Decoder v3.133.03
+     * [15]10 Decoder v3.133.02
+     * [16]11 Decoder v3.132.09
+     * [17]12 Decoder v3.132.08
+     * [18]13 Decoder v3.132.07
+     * [19]14 Decoder v3.132.05
+     * [20]15 Decoder v3.132.02
+     * [21]16 Decoder v3.131.03
+     * [22]17 Decoder v3.131.01
+     * [23]18 Decoder v3.129.04
+     * [24]19 Decoder v3.129.03
+     * [25]20 Decoder v3.129.02
+     * [26]21 Decoder v3.129.01
+     * [27]22 Decoder v3.128.01
+     * [28]23 Decoder v3.127.06
+     * [29]24 Decoder v3.127.05
+     * [30]25 Decoder v3.127.04
+     * [31]26 Decoder v3.127.03
+     * [32]27 Decoder v3.127.02
+     * [33]28 Decoder v3.127.01
+     * [34]29 Decoder v3.126.01
+     * [35]30 Decoder v3.125.03
+     * [36]31 Decoder v3.125.02
+     * [37]32 Decoder v3.124.07
+     * [38]33 Decoder v3.123.01
+     * [39]34 Decoder v3.123.01
+     * [40]35 Decoder v3.122.04
+     * [41]36 Decoder v3.121.04
+     * [42]37 (private) Decoder v3.120.01
+     * [43]38 Decoder v3.119.01
+     * [44]39 Decoder v3.118.01
+     * [45]40 Decoder v3.117.01
+     * [46]41 Decoder v3.116.01
+     * [47]42 Decoder v3.115.08
+     * [48]43 Decoder v3.115.07
+     * [49]44 Decoder v3.115.06
+     * [50]45 Decoder v3.115.05
+     * [51]46 Decoder v3.114.02
+     * [52]47 Decoder v3.114
+     * [53]48 Decoder v3.112.01
+     * [54]49 Decoder v3.111
+     * [55]50 Decoder v3.110
+     * [56]51 Decoder v3.108
+     * [57]52 Decoder v3.107
+     * [58]53 Decoder v3.106
+     * [59]54 Decoder v3.105
+     * [60]55 Decoder v3.104
+     * [61]56 Decoder v3.103
+     * [62]57 Decoder v3.102
+
+Decoder v3.134.01 (2011/12/09)
+
+   (experimental)
+     * Can receive recommended minimum jitter value from [63]encoder v3.146.01 or higher
+
+Decoder v3.133.14
+
+     * Use [64]encoder v3.144.33
+     * LDMP feedback uses multi-packet acknowledgment (one packet contains 32-recently received packet acknowledgements). Improves bitrate quality for links with bad return channel (decoder to encoder), such as LG/LTE modems
+
+Decoder v3.133.12
+
+     * Autofields accepts Rackmount from SDI correctly.
+     * Autofields option is now available in LCD.
+     * Autofields debug info is now displayed in log (video device printout).
+     * (private) SDI input had different ID on rackmount systems vs Avenir so only "deinterlace" worked correctly, but Swap Fields did not. That is why it was confusing if its working or not.
+
+Decoder v3.133.11
+
+     * Autofields order correct for "De-interlaced" mode (UP).
+
+Decoder v3.133.10
+
+     * Fix black screen during auto bandwidth negotiation (ABN)
+
+Decoder v3.133.09
+
+     * 720p->1080i conversion for 1/2 and 2/3
+
+Decoder v3.133.08
+
+     * Color space changed saved in registry (was effecting transcoder)
+
+Decoder v3.133.07
+
+     * Add 8-ch audio support
+     * Default output is now 8-ch (was 6-ch, still switchable).
+     * On AJA Kona-3 output to HDMI is enabled
+
+Decoder v3.133.03
+
+     * AAC multichannel crash fix (1 to 6-ch)
+     * Different error handling on app crash
+
+Decoder v3.133.02
+
+     * Significantly improved HD decoder behavior on packet loss by giving better result for all HD customers who experienced decoder restart, hangups, multiple error messages on packet loss.
+     * Fix HD decoder hang on restart
+
+Decoder v3.132.09
+
+     * Fix random invalid latency value report
+
+Decoder v3.132.08
+
+   (private) Beta
+     * This fixes "VIDEO OVERFLOW" - it's BACK!
+          + Calculates decoder plus encoder delay and shows it during auto-jitter (e.g. T=0.5)
+          + Actual delay on Encoder will be displayed if we add "ldmp_delay", which is decoder delay plus half RTT (estimation)
+
+Decoder v3.132.07
+
+   (private) Beta
+     * Add jitter-2 increase, on audio underflow. This should improve audio continuity (and increase jitter-2).
+
+Decoder v3.132.05
+
+     * Bug fix: HD decoder fix SD->HD upconvert when using single field mode.
+     * Bug fix: Video buffer bug fix: was increasing latency by approximately 15 frames, (not always, but on video delay). Limited to 7 frames now.
+
+   (experimental)
+     * Add support for 0.1s VBR
+     * Overall latency is limited by NETWORK+VIDEO/IO now (video was excluded before). Normal case for latency: network + video decoder (7 frames), AJA-4 frames (1 frame is actually video out). Lowest latency approximately 11 frames (not confirmed)
+          + When VBR 0.1 seconds is selected decoder latency is 100 ms, which is 3 frames.
+          + Video I/O delay could not be more then 7 frames, which leaves approximately 3 frames for video decoder and 4 for AJA.
+          + 11 frames (330 ms) only achievable with low delay audio (GSM/CELP). AAC delay is too high, approximately 0.2 seconds by itself.
+          + AAC is about 17 frames latency. The same is for VBR=0.2 any audio codec.
+
+   (private) Notes:
+    1. Check that both monitors have the same latency: connect BNC that comes to avenir to decoder monitor and compare with source, maybe use still camera with 1/60 shutter?
+    2. Run [65]E-3.143.06/[66]D-3.132.02 pair and capture latency/bitrate with both systems on LAN, 10.0.2.0/24 network to exclude network latency. (Do not use [67]E-3.143.10 yet)
+
+   First, use SD version of decoder, then do it again with HD version fixed at 1080i. If possible redo all the test again, because latency on [68]D-3.132.02 is not consistent. I suggest Full D1/ 5Mbps:
+VBR 0.2 AAC UDP
+VBR 0.2 CELP UDP
+VBR 0.2 GSM UDP
+----------------
+VBR 0.2 AAC LDMP
+VBR 0.2 CELP LDMP
+VBR 0.2 GSM LDMP
+----------------
+VBR 0.6 AAC UDP
+VBR 0.6 CELP UDP
+VBR 0.6 GSM UDP
+----------------
+VBR 0.6 AAC LDMP
+VBR 0.6 CELP LDMP
+VBR 0.6 GSM LDMP
+
+   Capture at minimum latency, jitter, bitrate, drop frames.
+
+Decoder v3.132.02
+
+     * Improvement for low latency: LDMP/auto-jitter gave inconsistent results
+     * Fast resync on initial start and 10-seconds delayed auto-jitter
+
+   Notes: One issue we had that if decoder/encoder LDMP sync is delayed on stream start, jitter values were inconsistent, sometimes up to 4 seconds.
+
+   This build does "latency adjustment" pretty fast with account for auto jitter. Then auto-jitter adjustment is delayed by 10 seconds (says DELAYED in OSD). Auto-jitter still counts down, but adjustment will start in 10 seconds.
+
+   The initial sync delay could be due to decoder restart, ABN, routing issues etc. Seems to explain inconsistent latency on WiFi networks before. You should see much more consistent delay values.
+
+   Make sure auto-jitter is ON and enable-latency-control is ON.
+
+Decoder v3.131.03
+
+   (private) Beta, for test only
+     * Fix for [69]bug 1174 web/change field order; forces decoder to restart now
+
+Decoder v3.131.01
+
+   (private) Beta, for test only
+     * Supports "single field streams" (requires [70]Encoder v3.140)
+
+Decoder v3.129.04
+
+   (private) Beta, for test only,
+     * Correctly resets AUTO-JITTER after ABN is done
+
+Decoder v3.129.03
+
+   (private) Beta, for test only,
+     * displays "autojitter in progress" and timer info over video
+
+Decoder v3.129.02
+
+   (private) Beta, for test only, improvements over v3.129.01:
+     * fix hang on "auto fields"
+     * improve switch time from HD to SD etc.
+     * ABN will lock in faster now.
+
+Decoder v3.129.01
+
+   (private) Beta, for test only
+     * doesn't require restart on resolution changes or stream restart
+     * fixed 720p 1/2 wide bug
+     * fixed audio event bug in SDI audio.
+
+Decoder v3.128.01
+
+     * Support for LDMP (low delay multi-path) protocol
+
+Decoder v3.127.06
+
+     * 3D Decoder, fixed split screen on output 1 in 3D
+
+Decoder v3.127.05
+
+     * Autofields: Changed to "Fields UP" for progressive source.
+
+   (private) We will need to check for SD->HD upconversion as well.
+
+Decoder v3.127.04
+
+     * AutoFields option is ON by default. ( since its only triggered if encoder stream supports it, has meta-data with field order info on source)
+
+Decoder v3.127.03
+
+     * AutoFields support for Avenir (Encoder-3.135.x+), SDI and DV source
+     * Correction for LS AutoFields support, now works correctly with AJA 6.5+ drivers
+
+Decoder v3.127.02
+
+     * AutoFields support for AJA-LH boards/HD
+          + AJA-LH: Matrox: Swap -UP(0)
+          + AJA-LH: Matrox: NoSwap -INV2(2)
+          + AJA-LH: DV: Swap -INV2(2)
+          + AJA-LH: DV: NoSwap -INV2(2)
+          + AJA-LH: Progressive -INV2(2)
+
+Decoder v3.127.01
+
+   (private) Beta Windows
+     * Automatic field order support
+     * Use AutoFields=1 in Win.INI to enable
+     * Requires Encoder 3.135 or better. Will switch to correct field order
+     * depending on input of Encoder DV, Matrox or iSight
+     * CIF/QVGA/Deinterlace/iSight - INV2
+     * DV - Fields UP
+     * Matrox: No SWAP: UP, SWAP: INV1
+     * All others are INV2
+
+Decoder v3.126.01
+
+   Windows
+     * Fix LCD panel to allow for switching from SD decoder to HD decoder.
+
+Decoder v3.125.03
+
+   Windows 3D (private) Beta
+     * Support for 720p in 3D mode
+     * (private) This build breaks 1080i however
+
+Decoder v3.125.02
+
+   3D, HD, SD (private) Beta
+     * AJA SDK 7.3 - fixes audio for 3D.
+
+Decoder v3.124.07
+
+   Windows 3D (private) Beta
+     * Multi-threading issue fixed for 3D decoder ( possible HD too)
+     * beta of per interface statistics
+
+Decoder v3.123.01
+
+     * Corvid board routing from video buffer 1 enabled. (private) Might break LH downconvert?
+
+Decoder v3.123.01
+
+   (private) Beta
+     * TCP mode now shows source IP when JITTER enabled
+     * (private) 3D build, not finished
+
+Decoder v3.122.04
+
+   (private) Beta
+     * UDP selection and status available via LCD
+
+Decoder v3.121.04
+
+   (private) Beta
+     * TCP mode added TCP=1 in win.ini file
+
+(private) Decoder v3.120.01
+
+   (private) Beta HD AP improvement. Require E-3.127
+
+Decoder v3.119.01
+
+   (private) Beta
+     * HD AP improvement. Require Encoder 3.126
+
+Decoder v3.118.01
+
+   (private) Beta
+     * ACT-L3 AP/Advanced Profile support added
+
+Decoder v3.117.01
+
+   (private) Beta
+     * HD ONLY fix for stuck slice at the bottom (unusual packet loss)
+
+Decoder v3.116.01
+
+   (private) Beta
+     * CIF banner fix
+
+Decoder v3.115.08
+
+   (private) Beta, stable
+     * A/V sync first 5 seconds fix.
+
+Decoder v3.115.07
+
+   (private) Beta, DO NOT USE, BUGGY!
+     * "autojittertimeout" command added to PHP interface
+     * AUTOJITTER toggles value from WIN.INI for PHP/LCD
+     * A/V sync allows more precise adjustment first 5 seconds on rebuffer/packet loss
+     * AAC decoder re-initialization on bad data (test)
+
+Decoder v3.115.06
+
+   (private) Beta
+     * AutoJitter for LCD/WEB returns correct info
+
+Decoder v3.115.05
+
+   (private) Beta
+     * A/V sync for 23.98 fix
+
+Decoder v3.114.02
+
+   (private) Beta
+     * SMP only. Fixes freeze for 23.98 in SMP.
+     * SMP only. Fixes hang on decoder restart in HD mode.
+
+Decoder v3.114
+
+   (private) Beta
+     * AutoJitterTimeout LCD fix
+     * ShowTimer from Web UI fix
+     * LCD menu for SD/LHe output fix
+
+Decoder v3.112.01
+
+   (private) Beta
+     * Added support for R-FRAMES ( recycle intra on encoder)
+     * Fix for auto jitter in LCD
+     * Added auto jitter timeout (A-J-TIMEOUT in LCD)
+
+Decoder v3.111
+
+   (private) Beta
+     * Added ability to monitor recovered or duplicate packets before increasing AUTO-JITTER
+     * reduces AUTOJITTER value when runs with FEC
+
+Decoder v3.110
+
+   (private) Beta
+     * Latency control. Will not adjust unless JITTER2 (and one) buffers are full. This should reduce amount of re-buffering.
+
+Decoder v3.108
+
+   (private) Beta
+     * FIX for CIF/QVGA interlacing artifact in HD decoder
+
+Decoder v3.107
+
+   (private) Beta
+     * AUTOJITTERTIMEOUT=10 times out jitter after 10 seconds by default
+     * JITTER statistics added
+
+Decoder v3.106
+
+     * 1080i/PAL fix
+
+Decoder v3.105
+
+     * 23.98 PSF fix. Actual frame rate is 23.976023976 (or 24/1.001) was causing accumulated A/V sync drift and restart of encoder (A/V sync lost message in LOG). Fix requires 3.105 decoder.
+     * Autojitter LCD setting in Network menu. (private) Has to be added to Web interface.
+
+Decoder v3.104
+
+     * for SD source 4:2:0 it always converts it to 4:2:2 before video output (before it was converting to 4:2:2 for Invert Fields modes only).
+     * LCD/"FIELD-SD" changed to "FIELD", as before option doesn't effect HD source material
+
+Decoder v3.103
+
+     * Output/Standard moved to top of Output
+     * Added Output/Standard/Wide for HD modes from SD stream to go wide screen
+     * NEWLCD=1 for win.ini to enable new LCD (private) \\10.0.2.10\Production\Streambox\High_Definition\HD_Decoder_32bit\Beta\3.103
+
+Decoder v3.102
+
+     * Transcoding PAL/NTSC and combination. Selectable via output menu/ standard.
+     * Can fix into 1080i etc. Some modes ( 720p/PAL) can be incorrect
+     * SD decoder receiving HD signal: will say "switch to HD" on LCD
+     * (private) Support for Corvid22 and Xena2 cards
+     * (private) Info on new INI Entries:
+          + (private) OutputAuto=1 default 1-will work as old version input matches output (e.g. NTSC in NTSC out)
+          + (private) If OutputAuto=0 following settings are used:
+          + (private) OutputStandard=0, 0-NTSC frame rates, 1-PAL frame rates, 2 - 23.93 frame rates for HD version:
+     * (private) Fix1080i=0, if 1 will always output in 1080i
+     * (private) Fix720p=0, if 1 will always output in 720p
+
+   Retrieved from "[71]http://10.0.2.69/wiki/index.php/Decoder_changelog"
+
+Views
+
+     * [72]Page
+     * [73]Discussion
+     * [74]View source
+     * [75]History
+
+Personal tools
+
+     * [76]Log in / create account
+
+Navigation
+
+     * [77]Main Page
+     * [78]Community portal
+     * [79]Current events
+     * [80]Recent changes
+     * [81]Random page
+     * [82]Help
+
+Search
+
+   ____________________ Go  Search
+
+Toolbox
+
+     * [83]What links here
+     * [84]Related changes
+     * [85]Upload file
+     * [86]Special pages
+     * [87]Printable version
+     * [88]Permanent link
+
+   [89]Powered by MediaWiki
+     * This page was last modified on 10 December 2011, at 14:35.
+     * This page has been accessed 1,399 times.
+     * [90]Privacy policy
+     * [91]About SBWiki
+     * [92]Disclaimers
+
+References
+
+   Visible links
+   1. http://10.0.2.69/wiki/opensearch_desc.php
+   2. http://10.0.2.69/wiki/index.php?title=Special:RecentChanges&feed=rss
+   3. http://10.0.2.69/wiki/index.php?title=Special:RecentChanges&feed=atom
+   4. http://10.0.2.69/wiki/index.php/Decoder_changelog#column-one
+   5. http://10.0.2.69/wiki/index.php/Decoder_changelog#searchInput
+   6. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.134.01_.282011.2F12.2F09.29
+   7. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.133.14
+   8. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.133.12
+   9. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.133.11
+  10. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.133.10
+  11. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.133.09
+  12. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.133.08
+  13. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.133.07
+  14. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.133.03
+  15. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.133.02
+  16. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.132.09
+  17. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.132.08
+  18. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.132.07
+  19. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.132.05
+  20. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.132.02
+  21. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.131.03
+  22. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.131.01
+  23. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.129.04
+  24. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.129.03
+  25. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.129.02
+  26. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.129.01
+  27. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.128.01
+  28. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.127.06
+  29. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.127.05
+  30. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.127.04
+  31. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.127.03
+  32. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.127.02
+  33. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.127.01
+  34. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.126.01
+  35. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.125.03
+  36. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.125.02
+  37. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.124.07
+  38. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.123.01
+  39. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.123.01_2
+  40. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.122.04
+  41. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.121.04
+  42. http://10.0.2.69/wiki/index.php/Decoder_changelog#.28private.29_Decoder_v3.120.01
+  43. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.119.01
+  44. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.118.01
+  45. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.117.01
+  46. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.116.01
+  47. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.115.08
+  48. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.115.07
+  49. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.115.06
+  50. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.115.05
+  51. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.114.02
+  52. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.114
+  53. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.112.01
+  54. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.111
+  55. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.110
+  56. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.108
+  57. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.107
+  58. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.106
+  59. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.105
+  60. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.104
+  61. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.103
+  62. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.102
+  63. http://10.0.2.69/wiki/index.php/Encoder_changelog#Encoder_v3.146.01_.282011.2F12.2F09.29
+  64. http://10.0.2.69/wiki/index.php/Encoder_changelog#Encoder_v3.144.33
+  65. http://10.0.2.69/wiki/index.php/Encoder_changelog#Encoder_v3.143.06
+  66. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.132.02
+  67. http://10.0.2.69/wiki/index.php/Encoder_changelog#Encoder_v3.143.10
+  68. http://10.0.2.69/wiki/index.php/Decoder_changelog#Decoder_v3.132.02
+  69. https://development.streambox.com:3443/bugzilla/show_bug.cgi?id=1174
+  70. http://10.0.2.69/wiki/index.php/Encoder_changelog#Encoder_v3.140.01
+  71. http://10.0.2.69/wiki/index.php/Decoder_changelog
+  72. http://10.0.2.69/wiki/index.php/Decoder_changelog
+  73. http://10.0.2.69/wiki/index.php?title=Talk:Decoder_changelog&action=edit
+  74. http://10.0.2.69/wiki/index.php?title=Decoder_changelog&action=edit
+  75. http://10.0.2.69/wiki/index.php?title=Decoder_changelog&action=history
+  76. http://10.0.2.69/wiki/index.php?title=Special:UserLogin&returnto=Decoder_changelog
+  77. http://10.0.2.69/wiki/index.php/Main_Page
+  78. http://10.0.2.69/wiki/index.php/SBWiki:Community_Portal
+  79. http://10.0.2.69/wiki/index.php/SBWiki:Current_events
+  80. http://10.0.2.69/wiki/index.php/Special:RecentChanges
+  81. http://10.0.2.69/wiki/index.php/Special:Random
+  82. http://10.0.2.69/wiki/index.php/Help:Contents
+  83. http://10.0.2.69/wiki/index.php/Special:WhatLinksHere/Decoder_changelog
+  84. http://10.0.2.69/wiki/index.php/Special:RecentChangesLinked/Decoder_changelog
+  85. http://10.0.2.69/wiki/index.php/Special:Upload
+  86. http://10.0.2.69/wiki/index.php/Special:SpecialPages
+  87. http://10.0.2.69/wiki/index.php?title=Decoder_changelog&printable=yes
+  88. http://10.0.2.69/wiki/index.php?title=Decoder_changelog&oldid=4115
+  89. http://www.mediawiki.org/
+  90. http://10.0.2.69/wiki/index.php/SBWiki:Privacy_policy
+  91. http://10.0.2.69/wiki/index.php/SBWiki:About
+  92. http://10.0.2.69/wiki/index.php/SBWiki:General_disclaimer
+
+   Hidden links:
+  93. http://10.0.2.69/wiki/index.php/Main_Page
