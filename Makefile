@@ -14,6 +14,7 @@ de: log=$(outstage1).log
 de: url=http://10.0.2.69/wiki/index.php/$(infile)
 de:
 	$(parse_changelog)
+	unix2dos $(infile)
 
 ##############################
 en: infile=Encoder_changelog
@@ -24,6 +25,7 @@ en: log=$(outstage1).log
 en: url=http://10.0.2.69/wiki/index.php/$(infile)
 en:
 	$(parse_changelog)
+	unix2dos $(infile)
 
 ##############################
 parse_changelog = \
