@@ -48,3 +48,5 @@ then \
 lynx --width=10000 -dump $(1) > $(2) 2>/dev/null; \
 fi
 
+clean:
+	@echo clean is no-op
