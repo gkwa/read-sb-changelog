@@ -18,7 +18,8 @@ my $first_rec_found=0;
 
 
 
-if($debug){
+if($debug)
+{
     open DEBUG, ">$log" or die "Can't open $log for write\n";
 
 }
@@ -27,7 +28,8 @@ open CL, "<$changelog_orig" or die "Can't open $changelog_orig for read\n";
 
 while(<CL>)
 {
-    if(/^(Encoder|Decoder) v/i){
+    if(/^(Encoder|Decoder) v/i)
+    {
 	$first_rec_found=1;
     }
     last if(/---private from here down---/);
@@ -35,7 +37,8 @@ while(<CL>)
 
     if($first_rec_found)
     {
-	if(/^\s*((\(private\)\s+)?(Encoder|Decoder) v($v))/i){
+	if(/^\s*((\(private\)\s+)?(Encoder|Decoder) v($v))/i)
+	{
 	    push @entries, $entry;
 	    $entry=$_;
 	    $on_header=1;
@@ -51,11 +54,6 @@ while(<CL>)
 close(CL);
 
 
-
-
-
-
-
 foreach my $entry (@entries)
 {
     $entry =~ /^\s*((\(private\)\s+)?(Encoder|Decoder) v($v))/i;
@@ -68,7 +66,8 @@ foreach my $entry (@entries)
     print DEBUG "$entry_title\n" if($debug);
 
     #skip header lines that have '(private)' in the section header
-    if(($entry_title =~ m/private/i)){
+    if(($entry_title =~ m/private/i))
+    {
 	print DEBUG "throwing out entry $entry_title\n"
 	    if($debug);
     }else{
@@ -78,8 +77,10 @@ foreach my $entry (@entries)
 	@elines = remove_private_section(\@elines);
 #	@elines = remove_experimental_section(\@elines);
 
-	for(@elines){
-	    if($debug){
+	for(@elines)
+	{
+	    if($debug)
+	    {
 		print DEBUG "-"x30,"\n";
 		print DEBUG "before private modification\n";
 		print DEBUG;
@@ -89,7 +90,8 @@ foreach my $entry (@entries)
 	    s,\*\s+\(private\).*,,xs;
 	    s,\(private\).*,,xs;
 	    s,^[\s\t]*$,,;
-	    if($debug){
+	    if($debug)
+	    {
 		print DEBUG "after private modification\n";
 		print DEBUG;
 		print DEBUG "\n";
@@ -129,10 +131,10 @@ foreach my $entry (@entries)
 	    entry => $entry
 	};
 
-	if($debug){
+	if($debug)
+	{
 	    print DEBUG "modified_entries: " . Dumper(\@modified_entries);
 	}
-
     }
 }
 
@@ -141,11 +143,13 @@ foreach my $entry (@modified_entries)
     print $entry->{'entry'};
 }
 
-if($debug){
+if($debug)
+{
     print DEBUG "I found ".scalar(@modified_entries)." private entries\n";
 }
 
-if($debug){
+if($debug)
+{
     print DEBUG Dumper(\@entries);
     print DEBUG Dumper(\@modified_entries);
 }
@@ -201,7 +205,8 @@ sub remove_private_section
 {
     my $lines = shift;		# ref to array
     my $found_private_section = 0;
-    for(my $i=0; $i<@{$lines};$i++){
+    for(my $i=0; $i<@{$lines};$i++)
+    {
 	$found_private_section = 1
 	    if($lines->[$i] =~ /^\s*\(private\)\s*$/);
 	splice(@{$lines}, $i, scalar(@{$lines})-$i+1)
@@ -214,7 +219,8 @@ sub remove_experimental_section
 {
     my $lines = shift;		# ref to array
     my $found_experimental_section = 0;
-    for(my $i=0; $i<@{$lines};$i++){
+    for(my $i=0; $i<@{$lines};$i++)
+    {
 	if($lines->[$i] =~ /^\s*\(experimental\)\s*$/)
 	{
 	    $found_experimental_section = 1;
