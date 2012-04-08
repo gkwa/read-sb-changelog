@@ -1,6 +1,11 @@
-debug=0
-update=1
+# usage: make update=1 en
+# usage: make update=0 debug=1 en
 
+debug=0
+
+# Set update=0 if you're not near wiki so you can just work off loal
+# copy Encoder_changelog.1 or Decoder_changelog.1
+update=1
 
 
 all: en de
@@ -27,6 +32,7 @@ en:
 	$(parse_changelog)
 	unix2dos $(infile)
 
+
 ##############################
 parse_changelog = \
 	$(call get_updates,$(url),$(outstage1)); \
@@ -49,4 +55,6 @@ lynx --width=10000 -dump $(1) > $(2) 2>/dev/null; \
 fi
 
 clean:
-	@echo clean is no-op
+	rm -f *.log
+	rm -f *.2
+	rm -f *.3
