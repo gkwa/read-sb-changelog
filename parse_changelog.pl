@@ -15,6 +15,7 @@ my $header_count=0;
 my $entries=();
 my $modified_entries=();
 my $first_rec_found=0;
+my $date_regexp = qr{\d{4}\/\d{1,2}/\d{1,2}};
 
 
 
@@ -56,7 +57,8 @@ close(CL);
 
 foreach my $entry (@entries)
 {
-    $entry =~ /^\s*((\(private\)\s+)?(Encoder|Decoder) v($v))/i;
+
+    $entry =~ /^\s*((\(private\)\s+)?(Encoder|Decoder) +v($v) *\($date_regexp\)?)/i;
     my $version = $4;
     my $entry_title = $1;
     next unless defined($entry_title);
@@ -124,12 +126,32 @@ foreach my $entry (@entries)
 
 	##############################
 
+	my $tmp_entry = $entry;
+	$tmp_entry =~ s,\s+$,,;
+	$tmp_entry =~ s,^\s+,,;
+
+	$tmp_entry =~ s,\Q$entry_title\E,,;
+	if($tmp_entry =~ /$entry_title/i)
+	{
+	    print DEBUG "entry title found in tmp_entry" . Dumper(\$entry_title);
+	}
+
+	if($debug)
+	{
+	    print DEBUG "entry_title: " . Dumper(\$entry_title);
+	    print DEBUG "tmp_entry: " . Dumper(\$tmp_entry);
+	}
+
 	push @modified_entries,
 	{
 	    title => $entry_title,
 	    version => $version,
 	    entry => $entry
-	};
+	}
+	# If entry contains only private stuff, then lets remove the
+	# entry all together (including entry title)
+	unless (0 == length($tmp_entry))
+	    ;
 
 	if($debug)
 	{
