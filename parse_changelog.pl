@@ -63,7 +63,7 @@ foreach my $entry (@entries)
 
     $entry = "\n" . $entry;
 
-    print DEBUG "$entry_title\n" if($debug);
+    print DEBUG "entry title: $entry_title\n" if($debug);
 
     #skip header lines that have '(private)' in the section header
     if(($entry_title =~ m/private/i))
