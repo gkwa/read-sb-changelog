@@ -116,6 +116,10 @@ foreach my $entry (@entries)
 	# for example change "([106]bug 1252)" to "(bug 1252)".  lynx
 	# creates these numbered links
 	$entry =~ s,\[\d+\]bug (\d+),bug $1,gi;
+
+	##############################
+	$entry = clean_empty_line_items($entry);
+
 	##############################
 
 	push @modified_entries,
@@ -154,6 +158,44 @@ if($debug)
 }
 
 
+
+sub clean_empty_line_items
+{
+
+    my $entry = shift;
+
+    # removes these line items
+
+    # this entry after (private) line items are removed:
+    # Encoder v3.148.02 (2012/1/27)
+    #    OSX
+    #      * Updates the encoder activation procedure to prevent r...
+    #          1. (private) New activations will use sysctlbyname(...
+    #          2. (private) The new fields are CPU frequency (e.g....
+    #          3. (private) Back compatibility: if a customer upgr...
+    #          4. (private) After Encoder upgrade (for activated E...
+
+    # will become this:
+    # Encoder v3.148.02 (2012/1/27)
+    #    OSX
+    #      * Updates the encoder activation procedure to prevent r...
+    #          1.
+    #          2.
+    #          3.
+    #          4.
+
+    # so lets remove the empty line items:
+
+    my @elines = split /\n/, $entry;
+
+    my $new_entry = "";
+
+    for(@elines)
+    {
+	$new_entry .= "$_\n" unless(/^\s+\d+\.\s*$/);
+    }
+    return $new_entry;
+}
 
 sub remove_private_section
 {
