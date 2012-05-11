@@ -56,5 +56,6 @@ fi
 
 clean:
 	rm -f *.log
+	rm -f *.1
 	rm -f *.2
 	rm -f *.3
