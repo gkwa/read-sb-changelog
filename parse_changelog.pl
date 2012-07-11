@@ -58,7 +58,7 @@ close(CL);
 foreach my $entry (@entries)
 {
 
-    $entry =~ /^\s*((\(private\)\s+)?(Encoder|Decoder) +v($v) *\($date_regexp\)?)/i;
+    $entry =~ /^\s*((\(private\)\s+)?(Encoder|Decoder) +v($v) .*\($date_regexp\)?)/i;
     my $version = $4;
     my $entry_title = $1;
     next unless defined($entry_title);
