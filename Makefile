@@ -51,7 +51,7 @@ autoformat = \
 get_updates = \
 if [ $(update) = 1 ]; \
 then \
-lynx --width=10000 -dump $(1) > $(2) 2>/dev/null; \
+lynx -connect_timeout=3 --width=10000 -dump $(1) > $(2) 2>/dev/null; \
 fi
 
 clean:
