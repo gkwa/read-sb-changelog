@@ -1,61 +1,39 @@
-# usage: make update=1 en
-# usage: make update=0 debug=1 en
+# usage: make Encoder
+# or
+# usage: make Decoder
+# or
+# usage: make --debug=basic --always-make Decoder
 
-debug=0
+wiki_changelog_baseurl=http://10.0.2.69/wiki/index.php
 
-# Set update=0 if you're not near wiki so you can just work off loal
-# copy Encoder_changelog.1 or Decoder_changelog.1
-update=1
+%:
+	$(MAKE) $(@)_changelog.html.parsed.tidy
 
+%.html.parsed.tidy : %.html.parsed ;
+	tidy \
+		--force-output true \
+		-asxhtml \
+		--tidy-mark no \
+		--doctype strict \
+		-indent \
+		-quiet \
+		-wrap 99999999 \
+		-clean \
+		-f $@.err \
+		-output $@ \
+		$^
 
-all: en de
+%.html.parsed : %.html ;
+	perl -w parse_changelog.pl --inputfile=$< --outputfile=$@
 
-##############################
-de: infile=Decoder_changelog
-de: outstage1=Decoder_changelog.1
-de: outstage2=Decoder_changelog.2
-de: outstage3=Decoder_changelog.3
-de: log=$(outstage1).log
-de: url=http://10.0.2.69/wiki/index.php/$(infile)
-de:
-	$(parse_changelog)
-	unix2dos $(infile)
+%_changelog.html: url=$(wiki_changelog_baseurl)/$(subst .html,,$@)
+%_changelog.html:
+	curl --silent -o$@ $(url)
 
-##############################
-en: infile=Encoder_changelog
-en: outstage1=Encoder_changelog.1
-en: outstage2=Encoder_changelog.2
-en: outstage3=Encoder_changelog.3
-en: log=$(outstage1).log
-en: url=http://10.0.2.69/wiki/index.php/$(infile)
-en:
-	$(parse_changelog)
-	unix2dos $(infile)
+.PRECIOUS: %_changelog.html %.html.parsed
 
-
-##############################
-parse_changelog = \
-	$(call get_updates,$(url),$(outstage1)); \
-	debug=$(debug) perl -w parse_changelog.pl $(outstage1) $(log) >$(outstage2); \
-	cat $(outstage2) | $(autoformat) >$(outstage3); \
-	cat $(outstage3) > $(infile); \
-	rm -f $(outstage2) $(outstage3) $(log)
-
-##############################
-
-autoformat = \
-	perl -MText::Autoformat -e \
-	'$$tin=""; while(<>){ $$tin .= "$$_"; }; $$tout=autoformat($$tin, {right=>72, all=>1}); print "$$tout\n"'
-
-##############################
-get_updates = \
-if [ $(update) = 1 ]; \
-then \
-lynx -connect_timeout=3 --width=10000 -dump $(1) > $(2) 2>/dev/null; \
-fi
+# lynx -nonumbers -width=100000 -dump Decoder_changelog.html >Decoder_changelog.lynx
 
 clean:
-	rm -f *.log
-	rm -f *.1
-	rm -f *.2
-	rm -f *.3
+	rm -f *.html *.parsed *.tidy *.tidy.err
+.PHONY: clean
