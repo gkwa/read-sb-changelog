@@ -32,6 +32,10 @@ TIDY_SW += -f $@.err
 
 .PRECIOUS: %_changelog.html %.html.parsed
 
+test:
+	rm -f Encoder_changelog.html.parsed.tidy
+	$(MAKE) Encoder
+
 # lynx -nonumbers -width=100000 -dump Decoder_changelog.html >Decoder_changelog.lynx
 
 clean:
