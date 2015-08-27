@@ -27,7 +27,7 @@ open CL, "<$changelog_orig" or die "Can't open $changelog_orig for read\n";
 
 while(<CL>)
 {
-    if(/^(Encoder|Decoder) v/i){
+    if(/^(Encoder|MediaPlayer|Decoder) v/i){
 	$first_rec_found=1;
     }
     last if(/---private from here down---/);
@@ -35,7 +35,7 @@ while(<CL>)
 
     if($first_rec_found)
     {
-	if(/^\s*((\(private\)\s+)?(Encoder|Decoder) v($v))/i){
+	if(/^\s*((\(private\)\s+)?(Encoder|MediaPlayer|Decoder) v($v))/i){
 	    push @entries, $entry;
 	    $entry=$_;
 	    $on_header=1;
@@ -58,7 +58,7 @@ close(CL);
 
 foreach my $entry (@entries)
 {
-    $entry =~ /^\s*((\(private\)\s+)?(Encoder|Decoder) v($v))/i;
+    $entry =~ /^\s*((\(private\)\s+)?(Encoder|MediaPlayer|Decoder) v($v))/i;
     my $version = $4;
     my $entry_title = $1;
     next unless defined($entry_title);
