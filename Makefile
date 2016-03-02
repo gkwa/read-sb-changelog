@@ -6,8 +6,12 @@
 
 wiki_changelog_baseurl=http://10.0.2.69/wiki/index.php
 
-%:
-	$(MAKE) $(@)_changelog.html.parsed.tidy
+all: encoder decoder
+
+decoder:
+	$(MAKE) Decoder_changelog.html.parsed.tidy
+encoder:
+	$(MAKE) Encoder_changelog.html.parsed.tidy
 
 TIDY_SW =
 TIDY_SW += --force-output true
