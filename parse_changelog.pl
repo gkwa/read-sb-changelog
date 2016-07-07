@@ -23,6 +23,13 @@ my $twig=XML::Twig->new(
 	$_->att_exists('class') and
 	    ($_->att('class') eq "mw-headline") and
 	    $_->del_att('class');
+	my $t=$_->text('no_recurse');
+	if($t =~ /\(private\)/i){
+	    $t =~ s{\(private\).*}{}i;
+	    $t =~ s,^\s+,,;
+	    $t =~ s,\s+$,,;
+	    $_->set_text($t);
+	}
         },
 
         li => sub {
@@ -34,6 +41,28 @@ my $twig=XML::Twig->new(
 	    $_->set_text($t);
 	}
         },
+
+        dl => sub {
+	my $t=$_->text('no_recurse');
+	if($t =~ /\(private\)/i){
+	    $t =~ s{\(private\).*}{}i;
+	    $t =~ s,^\s+,,;
+	    $t =~ s,\s+$,,;
+	    $_->set_text($t);
+	}
+        },
+
+        dd => sub {
+	my $t=$_->text('no_recurse');
+	if($t =~ /\(private\)/i){
+	    $t =~ s{\(private\).*}{}i;
+	    $t =~ s,^\s+,,;
+	    $t =~ s,\s+$,,;
+	    $_->set_text($t);
+	}
+        },
+
+
     },
     pretty_print => 'indented',	# output will be nicely formatted
     empty_tags   => 'html',	# outputs <empty_tag />
