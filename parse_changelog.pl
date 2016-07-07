@@ -6,7 +6,7 @@ use XML::Twig;
 my $verbose;
 my $inputfile = "";
 my $outputfile = "";
-$result = GetOptions (
+GetOptions (
     "inputfile=s"   => \$inputfile,
     "outputfile=s"   => \$outputfile
     );
