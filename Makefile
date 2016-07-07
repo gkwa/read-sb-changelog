@@ -25,7 +25,7 @@ TIDY_SW += -clean
 TIDY_SW += -f $@.err
 
 %.html.parsed.tidy : %.html.parsed ;
-	tidy $(TIDY_SW) -output $@ $^
+	-tidy $(TIDY_SW) -output $@ $^
 
 %.html.parsed : %.html ;
 	perl -w parse_changelog.pl --inputfile=$< --outputfile=$@
