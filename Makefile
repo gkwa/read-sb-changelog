@@ -9,9 +9,9 @@ wiki_changelog_baseurl=http://10.0.2.69/wiki/index.php
 all: encoder decoder
 
 decoder:
-	$(MAKE) Decoder_changelog.html.parsed.tidy
+	$(MAKE) Decoder_changelog
 encoder:
-	$(MAKE) Encoder_changelog.html.parsed.tidy
+	$(MAKE) Encoder_changelog
 
 TIDY_SW =
 TIDY_SW += --force-output true
@@ -23,6 +23,10 @@ TIDY_SW += -quiet
 TIDY_SW += -wrap 99999999
 TIDY_SW += -clean
 TIDY_SW += -f $@.err
+
+%_changelog : %_changelog.html.parsed.tidy
+	lynx -force_html -dump $^ >$@
+	unix2dos --quiet $@
 
 %.html.parsed.tidy : %.html.parsed ;
 	-tidy $(TIDY_SW) -output $@ $^
@@ -43,5 +47,5 @@ test:
 # lynx -nonumbers -width=100000 -dump Decoder_changelog.html >Decoder_changelog.lynx
 
 clean:
-	rm -f *.html *.parsed *.tidy *.tidy.err
+	rm -f *.html *.parsed *.tidy *.tidy.err *_changelog
 .PHONY: clean
